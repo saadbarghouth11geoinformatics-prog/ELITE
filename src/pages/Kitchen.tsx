@@ -17,7 +17,14 @@ import {
 import { Button } from '@/components/ui/button'
 import RevealOnScroll from '@/components/RevealOnScroll'
 import PageBackground from '@/components/PageBackground'
-import { allPublicVideos, kitchenHeroVideo, menuImageSet, pickPublicImage, publicImages } from '@/data/publicMedia'
+import {
+  allPublicVideos,
+  kitchenHeroVideo,
+  latestPublicVideos,
+  menuImageSet,
+  pickPublicImage,
+  publicImages,
+} from '@/data/publicMedia'
 
 type KitchenVideo = {
   title: string
@@ -54,9 +61,20 @@ const featuredKitchenTitles = [
   'مشهد ضيافة',
 ] as const
 
+const latestKitchenVideoTitles = [
+  'تجهيز بوفيه بألوان وردية وتنسيق راقٍ',
+  'طاولة بوفيه ممتدة وتجهيز متكامل للضيوف',
+  'تنسيق بوفيه باللون الكحلي والزهور البرتقالية',
+  'تجهيز بوفيه قاعة بلمسات حمراء',
+  'تفاصيل ترتيب أدوات ومائدة البوفيه',
+] as const
+
 const kitchenVideos: KitchenVideo[] = allPublicVideos.map((src, index) => ({
   src,
-  title: featuredKitchenTitles[index % featuredKitchenTitles.length],
+  title:
+    index < latestPublicVideos.length
+      ? latestKitchenVideoTitles[index] ?? featuredKitchenTitles[index % featuredKitchenTitles.length]
+      : featuredKitchenTitles[index % featuredKitchenTitles.length],
 }))
 
 const kitchenVideoStats = [
@@ -97,6 +115,11 @@ const categories: { id: GalleryFilter; name: string }[] = [
 ]
 
 const rawGalleryItems: GalleryItem[] = [
+  { id: 42, category: 'buffet', src: encodeURI('/images/New/WhatsApp Image 2026-07-19 at 10.53.46 PM.jpeg'), title: 'بوفيه متكامل للمقبلات والميني ساندويتش', likes: 612 },
+  { id: 43, category: 'food', src: encodeURI('/images/New/WhatsApp Image 2026-07-19 at 10.53.47 PM.jpeg'), title: 'رولات دجاج بتقديم فاخر', likes: 598 },
+  { id: 44, category: 'food', src: encodeURI('/images/New/WhatsApp Image 2026-07-19 at 10.53.57 PM.jpeg'), title: 'تشكيلة حلويات ومخبوزات للضيافة', likes: 584 },
+  { id: 45, category: 'buffet', src: encodeURI('/images/New/WhatsApp Image 2026-07-19 at 10.54.00 PM.jpeg'), title: 'ركن حلويات شرقية ومخبوزات', likes: 576 },
+  { id: 46, category: 'buffet', src: encodeURI('/images/New/WhatsApp Image 2026-07-19 at 10.54.01 PM.jpeg'), title: 'تنسيق بوفيه حديث للمناسبات', likes: 621 },
   { id: 1, category: 'events', src: '/images/gallery-1.jpg', title: 'استقبال فاخر للمناسبات الرسمية', likes: 562 },
   { id: 2, category: 'events', src: '/images/gallery-2.jpg', title: 'ضيافة مؤتمرات واجتماعات الشركات', likes: 537 },
   { id: 3, category: 'buffet', src: '/images/about-image.jpg', title: 'بوفيه رئيسي بخيارات متنوعة', likes: 518 },
@@ -382,12 +405,14 @@ export default function Kitchen() {
           title: 'لقطة افتتاحية من داخل المطبخ',
         }
       : EMPTY_KITCHEN_VIDEO)
-  const heroPoster = kitchenImages[0] ?? FALLBACK_IMAGE
+  const heroPoster = publicImages[0] ?? kitchenImages[0] ?? FALLBACK_IMAGE
   const activeVideoIndex = activeVideo ? kitchenVideos.findIndex((video) => video.src === activeVideo.src) : -1
   const activePoster =
-    activeVideoIndex >= 0 && kitchenImages.length > 0
-      ? kitchenImages[activeVideoIndex % kitchenImages.length] ?? heroPoster
-      : heroPoster
+    activeVideoIndex >= 0 && activeVideoIndex < latestPublicVideos.length
+      ? publicImages[activeVideoIndex % Math.max(publicImages.length, 1)] ?? heroPoster
+      : activeVideoIndex >= 0 && kitchenImages.length > 0
+        ? kitchenImages[activeVideoIndex % kitchenImages.length] ?? heroPoster
+        : heroPoster
   const isHeroBroken = !heroVideo.src || !!failedVideos[heroVideo.src]
   const isActiveVideoBroken = !activeVideo?.src || !!failedVideos[activeVideo.src]
 
@@ -544,8 +569,11 @@ export default function Kitchen() {
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
                 {kitchenVideos.map((video, index) => {
                   const posterSrc =
-                    kitchenImages.length > 0 ? kitchenImages[index % kitchenImages.length] : FALLBACK_IMAGE
-                  const isBroken = !!failedVideos[video.src]
+                    index < latestPublicVideos.length
+                      ? publicImages[index % Math.max(publicImages.length, 1)] ?? FALLBACK_IMAGE
+                      : kitchenImages.length > 0
+                        ? kitchenImages[index % kitchenImages.length]
+                        : FALLBACK_IMAGE
                   const isActive = activeVideo?.src === video.src
 
                   return (
@@ -564,29 +592,16 @@ export default function Kitchen() {
                         }`}
                       >
                         <div className="relative aspect-[4/5] overflow-hidden bg-dark-900">
-                          {isBroken ? (
-                            <img
-                              src={posterSrc}
-                              alt={video.title}
-                              onError={handleImageError}
-                              className="h-full w-full object-cover"
-                            />
-                          ) : (
-                            <video
-                              autoPlay
-                              loop
-                              muted
-                              playsInline
-                              preload="metadata"
-                              poster={posterSrc}
-                              onError={() => handleVideoError(video.src)}
-                              className={`h-full w-full object-cover transition-transform duration-500 ${
-                                isActive ? 'scale-[1.02]' : 'group-hover:scale-105'
-                              }`}
-                            >
-                                <source src={video.src} type="video/mp4" />
-                              </video>
-                            )}
+                          <img
+                            src={posterSrc}
+                            alt={video.title}
+                            loading="lazy"
+                            decoding="async"
+                            onError={handleImageError}
+                            className={`h-full w-full object-cover transition-transform duration-500 ${
+                              isActive ? 'scale-[1.02]' : 'group-hover:scale-105'
+                            }`}
+                          />
                         </div>
 
                         <div className="p-4 sm:p-5">

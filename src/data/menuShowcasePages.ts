@@ -1,6 +1,31 @@
-import { breakfastMenuPreview } from '@/data/publicMedia'
+import { breakfastMenuPreview, latestMenuImageSet } from '@/data/publicMedia'
 
 export const menuShowcasePages = [
+  {
+    src: latestMenuImageSet.externalCatering,
+    label: 'قائمة إليت الجديدة للحفلات الخارجية',
+    group: 'أحدث القوائم',
+  },
+  {
+    src: latestMenuImageSet.buffet15,
+    label: 'باقة بوفيه 15 متر',
+    group: 'أحدث القوائم',
+  },
+  {
+    src: latestMenuImageSet.buffet15Alternative,
+    label: 'باقة بوفيه 15 متر - تصميم إضافي',
+    group: 'أحدث القوائم',
+  },
+  {
+    src: latestMenuImageSet.buffet80,
+    label: 'قائمة البوفيه والمشروبات - باقة 80',
+    group: 'أحدث القوائم',
+  },
+  {
+    src: latestMenuImageSet.buffet70,
+    label: 'قائمة البوفيه والمشروبات - باقة 70',
+    group: 'أحدث القوائم',
+  },
   {
     src: breakfastMenuPreview,
     label: 'منيو الفطور',

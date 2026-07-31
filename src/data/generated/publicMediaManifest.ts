@@ -8,6 +8,11 @@ export const allPublicVideoPaths = [
   "/images/New%20images/WhatsApp%20Video%202026-03-17%20at%2011.12.05%20PM.mp4",
   "/images/New%20images/WhatsApp%20Video%202026-03-17%20at%2011.12.16%20PM.mp4",
   "/images/New%20images/WhatsApp%20Video%202026-03-17%20at%2011.12.27%20PM.mp4",
+  "/images/New/WhatsApp%20Video%202026-07-19%20at%2010.55.08%20PM.mp4",
+  "/images/New/WhatsApp%20Video%202026-07-19%20at%2011.14.57%20PM.mp4",
+  "/images/New/WhatsApp%20Video%202026-07-24%20at%201.00.37%20AM.mp4",
+  "/images/New/WhatsApp%20Video%202026-07-24%20at%201.01.15%20AM.mp4",
+  "/images/New/WhatsApp%20Video%202026-07-24%20at%201.01.24%20AM.mp4",
   "/images/WhatsApp%20Video%202026-03-15%20at%203.43.13%20AM.mp4",
   "/images/WhatsApp%20Video%202026-03-15%20at%203.44.09%20AM.mp4",
   "/images/WhatsApp%20Video%202026-03-15%20at%203.47.03%20AM.mp4",
@@ -66,4 +71,23 @@ export const breakfastVideoPaths = [
   "/images/%D8%A7%D9%84%D9%81%D8%B7%D8%A7%D8%B1/WhatsApp%20Video%202026-03-29%20at%2010.07.35%20PM.mp4",
   "/images/%D8%A7%D9%84%D9%81%D8%B7%D8%A7%D8%B1/WhatsApp%20Video%202026-03-29%20at%2010.07.32%20PM%20(1).mp4",
   "/images/%D8%A7%D9%84%D9%81%D8%B7%D8%A7%D8%B1/WhatsApp%20Video%202026-03-29%20at%2010.07.35%20PM%20(1).mp4"
+] as const
+export const latestImagePaths = [
+  "/images/New/WhatsApp%20Image%202026-07-19%20at%2010.51.02%20PM.jpeg",
+  "/images/New/WhatsApp%20Image%202026-07-19%20at%2010.51.03%20PM.jpeg",
+  "/images/New/WhatsApp%20Image%202026-07-19%20at%2010.53.46%20PM.jpeg",
+  "/images/New/WhatsApp%20Image%202026-07-19%20at%2010.53.47%20PM.jpeg",
+  "/images/New/WhatsApp%20Image%202026-07-19%20at%2010.53.57%20PM.jpeg",
+  "/images/New/WhatsApp%20Image%202026-07-19%20at%2010.54.00%20PM.jpeg",
+  "/images/New/WhatsApp%20Image%202026-07-19%20at%2010.54.01%20PM.jpeg",
+  "/images/New/WhatsApp%20Image%202026-07-19%20at%2011.14.59%20PM.jpeg",
+  "/images/New/WhatsApp%20Image%202026-07-19%20at%2011.15.00%20PM.jpeg",
+  "/images/New/WhatsApp%20Image%202026-07-19%20at%2010.51.03%20PM%20(1).jpeg"
+] as const
+export const latestVideoPaths = [
+  "/images/New/WhatsApp%20Video%202026-07-19%20at%2010.55.08%20PM.mp4",
+  "/images/New/WhatsApp%20Video%202026-07-19%20at%2011.14.57%20PM.mp4",
+  "/images/New/WhatsApp%20Video%202026-07-24%20at%201.00.37%20AM.mp4",
+  "/images/New/WhatsApp%20Video%202026-07-24%20at%201.01.15%20AM.mp4",
+  "/images/New/WhatsApp%20Video%202026-07-24%20at%201.01.24%20AM.mp4"
 ] as const

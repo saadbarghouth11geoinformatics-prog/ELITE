@@ -2,6 +2,7 @@ import { menuImageSet } from '@/data/publicMedia'
 import { serviceAreas, serviceAreasText, yearsOfExcellence } from '@/data/companyProfile'
 
 export const siteConfig = {
+  siteUrl: 'https://xn--mgbg1fxab.store',
   name: 'ELITE النخبة للحفلات والإعاشة',
   shortName: 'ELITE',
   description:
@@ -29,42 +30,42 @@ export type SeoRoute = {
 
 export const routeSeo: Record<string, SeoRoute> = {
   '/': {
-    title: 'ELITE النخبة للحفلات والإعاشة | ضيافة فاخرة في السعودية',
+    title: 'إيليت للحفلات والإعاشة | بوفيهات وضيافة في جدة ومكة',
     description:
       `خدمات إعاشة وضيافة فاخرة للحفلات والمناسبات في السعودية داخل ${serviceAreasText}. بوفيهات مفتوحة، قوائم طعام متنوعة، وتنظيم احترافي.`,
   },
   '/about': {
-    title: 'من نحن | ELITE النخبة للحفلات والإعاشة',
+    title: 'من نحن | إيليت للحفلات والإعاشة',
     description: `تعرف على خبرة النخبة في تنظيم الحفلات وخدمات الإعاشة لأكثر من ${yearsOfExcellence} عامًا.`,
   },
   '/services': {
-    title: 'خدماتنا | ELITE النخبة للحفلات والإعاشة',
+    title: 'خدمات إعاشة وتموين الحفلات | إيليت جدة ومكة',
     description:
       'خدمات إعاشة متكاملة لحفلات الزفاف والمناسبات الخاصة والشركات والبوفيه المفتوح.',
   },
   '/menu': {
-    title: 'قائمة الطعام | ELITE النخبة للحفلات والإعاشة',
+    title: 'قائمة الطعام والبوفيه | إيليت للحفلات والإعاشة',
     description:
       'معرض صور من قائمة الطعام للتصفح السريع، بينما اختيار الأصناف والحجز يتم من المنيو التفصيلي.',
   },
   '/menu-pages': {
-    title: 'ألبوم المنيو | ELITE النخبة للحفلات والإعاشة',
-    description: 'استعرض ألبوم صفحات المنيو الأصلية بالتقسيم الكامل قبل تصفح القائمة.',
+    title: 'منيو إيليت للحفلات | باقات البوفيه والإعاشة',
+    description: 'تصفح أحدث منيوهات وباقات بوفيه إيليت للحفلات الخارجية وخيارات الطعام والضيافة للمناسبات.',
   },
   '/menu-text': {
-    title: 'المنيو التفصيلي | ELITE النخبة للحفلات والإعاشة',
+    title: 'المنيو التفصيلي | إيليت للحفلات والإعاشة',
     description: 'قائمة تفصيلية سريعة لخيارات الطعام المناسبة لحفلتك القادمة.',
   },
   '/kitchen': {
-    title: 'داخل المطبخ | ELITE النخبة للحفلات والإعاشة',
-    description: 'كواليس تجهيز الضيافة وفيديوهات من داخل المطبخ ومعرض لحظات العمل.',
+    title: 'تجهيز البوفيهات وكواليس العمل | إيليت للحفلات',
+    description: 'صور وفيديوهات تجهيز بوفيهات المناسبات وتنسيق طاولات الضيافة من فريق إيليت للحفلات والإعاشة.',
   },
   '/booking': {
-    title: 'احجز الآن | ELITE النخبة للحفلات والإعاشة',
-    description: 'احجز خدمات الإعاشة بسهولة واحصل على عرض سريع يناسب مناسبتك.',
+    title: 'حجز بوفيه وتموين حفلات | إيليت للحفلات والإعاشة',
+    description: 'اطلب حجز بوفيه أو خدمات إعاشة وضيافة لحفلتك في جدة ومكة والطائف واحصل على عرض يناسب مناسبتك.',
   },
   '/contact': {
-    title: 'تواصل معنا | ELITE النخبة للحفلات والإعاشة',
+    title: 'تواصل مع إيليت للحفلات والإعاشة | 0548823127',
     description: `تواصل معنا للحجز والاستفسارات وخدمات الإعاشة في السعودية داخل ${serviceAreasText}.`,
   },
 }
@@ -72,8 +73,7 @@ export const routeSeo: Record<string, SeoRoute> = {
 export const getSiteUrl = () => {
   const envUrl = import.meta.env.VITE_SITE_URL
   if (envUrl) return envUrl.replace(/\/+$/, '')
-  if (typeof window !== 'undefined') return window.location.origin
-  return ''
+  return siteConfig.siteUrl
 }
 
 export const buildUrl = (path: string) => {

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import PageBackground from '@/components/PageBackground'
@@ -12,6 +12,18 @@ const heroVideo = menuShowcaseHeroVideo
 
 export default function MenuShowcase() {
   const [selectedPage, setSelectedPage] = useState<(typeof menuShowcasePages)[number] | null>(null)
+  const [canLoadHeroVideo, setCanLoadHeroVideo] = useState(false)
+
+  useEffect(() => {
+    const startVideo = () => setCanLoadHeroVideo(true)
+    const timeoutId = window.setTimeout(startVideo, 2500)
+    window.addEventListener('load', startVideo, { once: true })
+
+    return () => {
+      window.clearTimeout(timeoutId)
+      window.removeEventListener('load', startVideo)
+    }
+  }, [])
 
   return (
     <div dir="rtl" className="relative min-h-screen bg-dark text-white">
@@ -24,11 +36,11 @@ export default function MenuShowcase() {
             muted
             loop
             playsInline
-            preload="metadata"
-            poster={menuShowcasePages[0]?.src ?? menuImageSet.weddingCake}
+            preload="none"
+            poster={menuImageSet.weddingCake}
             className="h-full w-full object-cover opacity-70"
           >
-            <source src={heroVideo} type="video/mp4" />
+            {canLoadHeroVideo ? <source src={heroVideo} type="video/mp4" /> : null}
           </video>
           <div className="absolute inset-0 bg-gradient-to-b from-dark/0 via-dark/65 to-dark/85" />
         </div>
@@ -74,7 +86,7 @@ export default function MenuShowcase() {
           </div>
 
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {menuShowcasePages.map((page) => (
+            {menuShowcasePages.map((page, index) => (
               <motion.button
                 key={page.src}
                 type="button"
@@ -87,7 +99,8 @@ export default function MenuShowcase() {
                   <img
                     src={page.src}
                     alt={page.label}
-                    loading="lazy"
+                    loading={index < 4 ? 'eager' : 'lazy'}
+                    fetchPriority={index < 4 ? 'high' : 'auto'}
                     decoding="async"
                     className="h-full w-full object-contain"
                   />

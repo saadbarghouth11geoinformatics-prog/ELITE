@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
 import {
   Apple,
@@ -19,6 +19,7 @@ import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import {
   breakfastGalleryMedia,
+  latestEventImages,
   menuHeroVideo,
   menuImageSet,
   type GalleryMediaItem,
@@ -38,6 +39,7 @@ const menuBackgroundImages = [menuImageSet.weddingCake, menuImageSet.biryani]
 const galleryPools: Record<FilterCategory, GalleryMediaItem[]> = {
   breakfast: breakfastGalleryMedia,
   appetizers: imageMediaGroup([
+    ...latestEventImages.filter((_, index) => [0, 1, 4].includes(index)),
     '/images/menu-hummus.jpg',
     '/images/menu-tabbouleh.jpg',
     '/images/menu-warak.jpg',
@@ -64,6 +66,7 @@ const galleryPools: Record<FilterCategory, GalleryMediaItem[]> = {
     '/images/New images/WhatsApp Image 2026-03-17 at 10.48.39 PM (1).jpeg',
   ]),
   desserts: imageMediaGroup([
+    ...latestEventImages.filter((_, index) => [2, 3].includes(index)),
     '/images/menu-kunafa.jpg',
     '/images/menu-baklava.jpg',
     '/images/menu-ummali.jpg',
@@ -126,6 +129,18 @@ const allGalleryMedia = dedupeMedia([
 export default function Menu() {
   const [activeCategory, setActiveCategory] = useState<GalleryCategory>('all')
   const [selectedMedia, setSelectedMedia] = useState<GalleryMediaItem | null>(null)
+  const [canLoadHeroVideo, setCanLoadHeroVideo] = useState(false)
+
+  useEffect(() => {
+    const startVideo = () => setCanLoadHeroVideo(true)
+    const timeoutId = window.setTimeout(startVideo, 2500)
+    window.addEventListener('load', startVideo, { once: true })
+
+    return () => {
+      window.clearTimeout(timeoutId)
+      window.removeEventListener('load', startVideo)
+    }
+  }, [])
 
   const visibleMedia = useMemo(() => {
     if (activeCategory === 'all') {
@@ -150,7 +165,7 @@ export default function Menu() {
             poster={menuImageSet.biryani}
             className="h-full w-full object-cover opacity-70"
           >
-            <source src={menuHeroVideo} type="video/mp4" />
+            {canLoadHeroVideo ? <source src={menuHeroVideo} type="video/mp4" /> : null}
           </video>
           <div className="absolute inset-0 bg-gradient-to-b from-dark/10 via-dark/65 to-dark/90" />
           <div className="absolute inset-0 opacity-20">
@@ -289,16 +304,19 @@ export default function Menu() {
                     <img
                       src={item.poster}
                       alt={`معاينة فيديو من قائمة الطعام ${index + 1}`}
-                      loading="lazy"
+                      loading={index < 4 ? 'eager' : 'lazy'}
+                      fetchPriority={index < 4 ? 'high' : 'auto'}
                       decoding="async"
                       className="h-full w-full object-cover"
                     />
                   ) : (
                     <img
                       src={item.src}
-                    alt={`صورة من قائمة الطعام ${index + 1}`}
-                    loading="lazy"
-                    decoding="async"
+                      alt={`صورة من قائمة الطعام ${index + 1}`}
+                      loading={index < 4 ? 'eager' : 'lazy'}
+                      fetchPriority={index < 4 ? 'high' : 'auto'}
+                      decoding="async"
+                      className="h-full w-full object-cover"
                     />
                   )}
                 </DrinkFloat>

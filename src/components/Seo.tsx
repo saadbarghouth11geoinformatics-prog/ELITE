@@ -1,9 +1,32 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { buildUrl, getSiteUrl, routeSeo, siteConfig } from '@/data/seo'
+import { latestEventImages, latestPublicVideos } from '@/data/publicMedia'
+
+const routeLabels: Record<string, string> = {
+  '/about': 'من نحن',
+  '/services': 'خدماتنا',
+  '/menu': 'قائمة الطعام',
+  '/menu-pages': 'ألبوم المنيو',
+  '/menu-text': 'المنيو التفصيلي',
+  '/kitchen': 'داخل المطبخ',
+  '/booking': 'احجز الآن',
+  '/contact': 'تواصل معنا',
+}
+
+const latestVideoNames = [
+  'تجهيز بوفيه بألوان وردية',
+  'طاولة بوفيه ممتدة للمناسبات',
+  'تنسيق بوفيه باللون الكحلي',
+  'تجهيز بوفيه قاعة بلمسات حمراء',
+  'ترتيب أدوات ومائدة البوفيه',
+]
+
+const latestVideoDates = ['2026-07-19', '2026-07-19', '2026-07-24', '2026-07-24', '2026-07-24']
 
 export default function Seo() {
   const { pathname } = useLocation()
+
   useEffect(() => {
     const meta = routeSeo[pathname] ?? routeSeo['/']
     const title = meta?.title ?? siteConfig.name
@@ -12,7 +35,7 @@ export default function Seo() {
     const canonical = buildUrl(pathname)
     const imagePath = meta?.image ?? siteConfig.defaultImage
     const siteUrl = getSiteUrl()
-    const imageUrl = siteUrl ? buildUrl(imagePath) : imagePath
+    const imageUrl = buildUrl(imagePath)
 
     const setMetaTag = (attr: 'name' | 'property', key: string, value?: string) => {
       if (!value) return
@@ -30,14 +53,16 @@ export default function Seo() {
       let element = document.head.querySelector<HTMLLinkElement>(`link[rel="${rel}"]`)
       if (!element) {
         element = document.createElement('link')
-        element.setAttribute('rel', rel)
+        element.rel = rel
         document.head.appendChild(element)
       }
-      element.setAttribute('href', href)
+      element.href = href
     }
 
     const setJsonLd = (data: Record<string, unknown>) => {
-      let element = document.head.querySelector<HTMLScriptElement>('script[data-seo="schema"]')
+      let element = document.head.querySelector<HTMLScriptElement>(
+        'script[data-seo="schema"], script[data-static-seo]'
+      )
       if (!element) {
         element = document.createElement('script')
         element.type = 'application/ld+json'
@@ -51,13 +76,11 @@ export default function Seo() {
     document.documentElement.dir = 'rtl'
     document.title = title
 
+    const robots = 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1'
     setMetaTag('name', 'description', description)
     setMetaTag('name', 'keywords', keywords)
-    setMetaTag(
-      'name',
-      'robots',
-      'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1'
-    )
+    setMetaTag('name', 'robots', robots)
+    setMetaTag('name', 'googlebot', robots)
     setMetaTag('name', 'theme-color', siteConfig.themeColor)
     setMetaTag('name', 'author', siteConfig.name)
 
@@ -76,26 +99,86 @@ export default function Seo() {
     setMetaTag('name', 'twitter:image', imageUrl)
 
     setLinkTag('canonical', canonical)
+    document.head.querySelectorAll('link[rel="alternate"][hreflang]').forEach((element) => element.remove())
+    ;['ar-SA', 'x-default'].forEach((language) => {
+      const alternate = document.createElement('link')
+      alternate.rel = 'alternate'
+      alternate.hreflang = language
+      alternate.href = canonical
+      document.head.appendChild(alternate)
+    })
 
-    const schema = {
-      '@context': 'https://schema.org',
-      '@type': 'Caterer',
-      name: siteConfig.name,
-      description,
-      url: siteUrl || undefined,
-      telephone: siteConfig.phone,
-      email: siteConfig.email,
-      image: imageUrl || undefined,
-      areaServed: siteConfig.areaServed,
-      address: {
-        '@type': 'PostalAddress',
-        addressLocality: siteConfig.addressLocality,
-        addressCountry: siteConfig.addressCountry,
+    const graph: Array<Record<string, unknown>> = [
+      {
+        '@type': 'WebSite',
+        '@id': `${siteUrl}/#website`,
+        url: `${siteUrl}/`,
+        name: siteConfig.name,
+        inLanguage: 'ar-SA',
       },
-      sameAs: [siteConfig.instagram],
+      {
+        '@type': 'Caterer',
+        '@id': `${siteUrl}/#business`,
+        name: siteConfig.name,
+        description: siteConfig.description,
+        url: `${siteUrl}/`,
+        telephone: siteConfig.phone,
+        email: siteConfig.email,
+        image: imageUrl,
+        priceRange: '$$',
+        areaServed: siteConfig.areaServed,
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: siteConfig.addressLocality,
+          addressRegion: 'منطقة مكة المكرمة',
+          addressCountry: siteConfig.addressCountry,
+        },
+        sameAs: [siteConfig.instagram],
+      },
+      {
+        '@type': 'WebPage',
+        '@id': `${canonical}#webpage`,
+        url: canonical,
+        name: title,
+        description,
+        inLanguage: 'ar-SA',
+        isPartOf: { '@id': `${siteUrl}/#website` },
+        about: { '@id': `${siteUrl}/#business` },
+        primaryImageOfPage: imageUrl ? { '@type': 'ImageObject', url: imageUrl } : undefined,
+      },
+    ]
+
+    if (pathname !== '/') {
+      graph.push({
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'الرئيسية', item: `${siteUrl}/` },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: routeLabels[pathname] ?? title,
+            item: canonical,
+          },
+        ],
+      })
     }
 
-    setJsonLd(schema)
+    if (pathname === '/kitchen') {
+      latestPublicVideos.forEach((video, index) => {
+        graph.push({
+          '@type': 'VideoObject',
+          name: latestVideoNames[index] ?? `فيديو تجهيز بوفيه ${index + 1}`,
+          description: 'فيديو من تجهيزات بوفيهات وضيافة إيليت للحفلات والإعاشة.',
+          uploadDate: latestVideoDates[index] ?? '2026-07-31',
+          contentUrl: buildUrl(video),
+          thumbnailUrl: buildUrl(
+            latestEventImages[index % Math.max(latestEventImages.length, 1)] ?? imagePath
+          ),
+        })
+      })
+    }
+
+    setJsonLd({ '@context': 'https://schema.org', '@graph': graph })
   }, [pathname])
 
   return null

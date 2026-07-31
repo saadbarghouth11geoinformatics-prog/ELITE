@@ -284,3 +284,13 @@
   .bg-dark-700 { background-color: rgba(0, 0, 0, 0.74) !important; }
   .bg-dark-600 { background-color: rgba(0, 0, 0, 0.68) !important; }
 }
+
+/* Keep transient network failures from flashing a broken-image icon. */
+img[data-image-state='retrying'] {
+  opacity: 0;
+}
+
+img[data-image-state='fallback'] {
+  object-fit: cover;
+  opacity: 0.72;
+}
