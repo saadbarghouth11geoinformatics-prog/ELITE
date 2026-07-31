@@ -8,8 +8,10 @@ const quickLinks = [
   { name: 'من نحن', href: '/about' },
   { name: 'خدماتنا', href: '/services' },
   { name: 'قائمة الطعام', href: '/menu' },
+  { name: 'ألبوم المنيو', href: '/menu-pages' },
   { name: 'داخل المطبخ', href: '/kitchen' },
   { name: 'احجز الآن', href: '/booking' },
+  { name: 'تواصل معنا', href: '/contact' },
 ]
 
 const services = [
