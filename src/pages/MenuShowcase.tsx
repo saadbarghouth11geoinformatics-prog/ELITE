@@ -1,35 +1,28 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import PageBackground from '@/components/PageBackground'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { menuImageSet, menuShowcaseHeroVideo } from '@/data/publicMedia'
+import { menuImageSet } from '@/data/publicMedia'
 import { menuShowcasePages } from '@/data/menuShowcasePages'
-
-const showcaseBackgrounds = [menuImageSet.weddingCake, menuImageSet.biryani]
-const heroVideo = menuShowcaseHeroVideo
 
 export default function MenuShowcase() {
   const [selectedPage, setSelectedPage] = useState<(typeof menuShowcasePages)[number] | null>(null)
+  const [visibleCount, setVisibleCount] = useState(8)
+  const visiblePages = menuShowcasePages.slice(0, visibleCount)
 
   return (
-    <div dir="rtl" className="relative min-h-screen bg-dark text-white">
-      <PageBackground images={showcaseBackgrounds} />
-
+    <div dir="rtl" className="relative min-h-screen bg-[linear-gradient(180deg,#090909_0%,#11100c_48%,#090909_100%)] text-white">
       <section className="relative min-h-[60vh] sm:min-h-[70vh] flex items-center overflow-hidden py-24">
         <div className="absolute inset-0">
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            poster={menuShowcasePages[0]?.src ?? menuImageSet.weddingCake}
+          <img
+            src={menuImageSet.weddingCake}
+            alt=""
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
             className="h-full w-full object-cover opacity-70"
-          >
-            <source src={heroVideo} type="video/mp4" />
-          </video>
+          />
           <div className="absolute inset-0 bg-gradient-to-b from-dark/0 via-dark/65 to-dark/85" />
         </div>
         <div className="container-custom px-4 sm:px-6 lg:px-8 relative pt-28 pb-12">
@@ -74,20 +67,20 @@ export default function MenuShowcase() {
           </div>
 
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {menuShowcasePages.map((page) => (
-              <motion.button
+            {visiblePages.map((page) => (
+              <button
                 key={page.src}
                 type="button"
                 onClick={() => setSelectedPage(page)}
-                whileHover={{ scale: 1.02, y: -6 }}
-                whileTap={{ scale: 0.98 }}
-                className="group rounded-2xl border border-gold/20 bg-dark-800/70 p-3 text-right shadow-[0_18px_35px_rgba(0,0,0,0.35)] transition hover:border-gold/40"
+                className="group rounded-2xl border border-gold/20 bg-dark-800/70 p-3 text-right shadow-[0_18px_35px_rgba(0,0,0,0.35)] transition-transform duration-200 hover:-translate-y-1 hover:border-gold/40"
+                style={{ contentVisibility: 'auto', containIntrinsicSize: '320px 430px' }}
               >
                 <div className="relative overflow-hidden rounded-xl bg-dark-900/60 aspect-[3/4]">
                   <img
                     src={page.src}
                     alt={page.label}
                     loading="lazy"
+                    fetchPriority="low"
                     decoding="async"
                     className="h-full w-full object-contain"
                   />
@@ -97,9 +90,22 @@ export default function MenuShowcase() {
                     {page.group && <div className="mt-1 text-xs text-gold">{page.group}</div>}
                   </div>
                 </div>
-              </motion.button>
+              </button>
             ))}
           </div>
+
+          {visibleCount < menuShowcasePages.length ? (
+            <div className="mt-8 flex justify-center">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setVisibleCount((count) => count + 8)}
+                className="border-gold/40 px-8 py-3 font-arabic text-gold hover:bg-gold/10"
+              >
+                عرض المزيد
+              </Button>
+            </div>
+          ) : null}
         </div>
       </section>
 

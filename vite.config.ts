@@ -8,7 +8,7 @@ export default defineConfig(({ command }) => {
   const isDev = command === 'serve'
 
   return {
-    base: './',
+    base: '/',
     plugins: [react(), ...(isDev ? [inspectAttr()] : [])],
     resolve: {
       alias: {

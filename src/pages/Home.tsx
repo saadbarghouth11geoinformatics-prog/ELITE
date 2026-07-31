@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
+import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 import { 
   Phone, ArrowLeft, Heart, 
   ChefHat, PartyPopper, Building2, Briefcase, Utensils,
@@ -12,9 +12,10 @@ import AnimatedCounter from '@/components/AnimatedCounter'
 import RevealOnScroll from '@/components/RevealOnScroll'
 import MagneticButton from '@/components/MagneticButton'
 import PageBackground from '@/components/PageBackground'
+import LocalServiceContent from '@/components/LocalServiceContent'
+import useDesktopHeroVideo from '@/hooks/useDesktopHeroVideo'
 import FoodTrayReveal from '@/components/animations/FoodTrayReveal'
 import DrinkFloat from '@/components/animations/DrinkFloat'
-import TextReveal from '@/components/animations/TextReveal'
 import StaggerContainer from '@/components/animations/StaggerContainer'
 import FloatingCard from '@/components/animations/FloatingCard'
 import { homeHeroVideo, menuImageSet, serviceImageSet } from '@/data/publicMedia'
@@ -123,6 +124,7 @@ function ParticleBackground() {
 
 // Hero Section
 function HeroSection() {
+  const canPlayHeroVideo = useDesktopHeroVideo()
   const { scrollY } = useScroll()
   const y1 = useTransform(scrollY, [0, 500], [0, 200])
   const opacity = useTransform(scrollY, [0, 400], [1, 0])
@@ -135,22 +137,16 @@ function HeroSection() {
     <section className="relative flex min-h-[92svh] items-center justify-center overflow-hidden sm:min-h-screen">
       {/* Parallax Background */}
       <motion.div style={{ y: y1 }} className="absolute inset-0">
-        {isHeroVideoBroken ? (
-          <AnimatePresence initial={false}>
-            <motion.img
-              key={heroImage}
-              src={heroImage}
-              alt="بوفيه فخم وأطباق طازجة"
-              loading={heroIndex === 0 ? 'eager' : 'lazy'}
-              decoding="async"
-              fetchPriority={heroIndex === 0 ? 'high' : 'auto'}
-              className="absolute inset-0 w-full h-full object-cover"
-              initial={{ opacity: 0, scale: 1.05 }}
-              animate={{ opacity: 1, scale: 1.1 }}
-              exit={{ opacity: 0, scale: 1.08 }}
-              transition={{ duration: 1.4, ease: 'easeInOut' }}
-            />
-          </AnimatePresence>
+        {isHeroVideoBroken || !canPlayHeroVideo ? (
+          <img
+            key={heroImage}
+            src={heroImage}
+            alt="بوفيه فخم وأطباق طازجة"
+            loading={heroIndex === 0 ? 'eager' : 'lazy'}
+            decoding="async"
+            fetchPriority={heroIndex === 0 ? 'high' : 'auto'}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
         ) : (
           <motion.video
             autoPlay
@@ -213,40 +209,25 @@ function HeroSection() {
         </motion.div>
 
         {/* Title */}
-        <motion.h1
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3, delay: 0.3 }}
-          className="mb-4 text-3xl font-bold leading-tight drop-shadow-[0_10px_35px_rgba(0,0,0,0.95)] sm:mb-6 sm:text-6xl md:text-7xl lg:text-8xl"
-        >
+        <h1 className="mb-4 text-3xl font-bold leading-tight drop-shadow-[0_10px_35px_rgba(0,0,0,0.95)] sm:mb-6 sm:text-6xl md:text-7xl lg:text-8xl">
           <span className="block font-arabic text-[#f2d36b] drop-shadow-[0_8px_28px_rgba(0,0,0,0.92)]">
-            <TextReveal text="ELITE النخبة" delay={0.4} mode="words" className="" />
+            ELITE النخبة
           </span>
           <span className="mt-2 block text-2xl leading-tight text-white font-arabic sm:mt-4 sm:text-5xl md:text-6xl">
-            <TextReveal text="للحفلات والإعاشة" delay={0.6} mode="words" className="" />
+            للحفلات والإعاشة
           </span>
-        </motion.h1>
+        </h1>
 
         {/* Subtitle */}
-        <motion.p
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-          className="mx-auto mb-3 w-fit max-w-3xl rounded-2xl bg-black/58 px-4 py-3 text-lg text-white drop-shadow-[0_6px_24px_rgba(0,0,0,0.92)] font-arabic sm:mb-4 sm:px-6 sm:text-xl md:text-2xl"
-        >
+        <p className="mx-auto mb-3 w-fit max-w-3xl rounded-2xl bg-black/58 px-4 py-3 text-lg text-white drop-shadow-[0_6px_24px_rgba(0,0,0,0.92)] font-arabic sm:mb-4 sm:px-6 sm:text-xl md:text-2xl">
           نقدم لكم تجربة طعام فاخرة لجميع مناسباتكم
-        </motion.p>
+        </p>
 
         {/* Description */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.7 }}
-          className="mx-auto max-w-xl rounded-2xl bg-black/54 px-4 py-4 text-sm leading-7 text-white/92 drop-shadow-[0_6px_20px_rgba(0,0,0,0.9)] font-arabicBody sm:max-w-2xl sm:px-6 sm:text-base md:text-lg"
-        >
+        <p className="mx-auto max-w-xl rounded-2xl bg-black/54 px-4 py-4 text-sm leading-7 text-white/92 drop-shadow-[0_6px_20px_rgba(0,0,0,0.9)] font-arabicBody sm:max-w-2xl sm:px-6 sm:text-base md:text-lg">
           خدمات إعاشة متكاملة للحفلات والمناسبات والمطاعم في جميع أنحاء المملكة العربية السعودية
           {`، في ${serviceAreasText}`}
-        </motion.p>
+        </p>
         </div>
 
         <motion.div
@@ -899,6 +880,7 @@ export default function Home() {
         <AboutPreviewSection />
         <ServicesPreviewSection />
         <MenuPreviewSection />
+        <LocalServiceContent />
         <CTASection />
       </motion.div>
     </div>

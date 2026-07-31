@@ -11,6 +11,7 @@ import FloatingCard from '@/components/animations/FloatingCard'
 import StaggerContainer from '@/components/animations/StaggerContainer'
 import TextReveal from '@/components/animations/TextReveal'
 import { menuImageSet, pickNonMenuImage, serviceImageSet, servicesHeroVideo } from '@/data/publicMedia'
+import useDesktopHeroVideo from '@/hooks/useDesktopHeroVideo'
 
 const services = [
   {
@@ -133,6 +134,7 @@ const servicesHeroImage = pickNonMenuImage(9)
 const servicesShowcaseImage = pickNonMenuImage(16)
 
 export default function Services() {
+  const canPlayHeroVideo = useDesktopHeroVideo()
   const [isHeroVideoBroken, setIsHeroVideoBroken] = useState(false)
   return (
     <div className="relative overflow-hidden bg-dark">
@@ -148,7 +150,7 @@ export default function Services() {
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center bg-dark overflow-hidden">
         <div className="absolute inset-0">
-          {isHeroVideoBroken ? (
+          {isHeroVideoBroken || !canPlayHeroVideo ? (
             <img
               src={servicesHeroImage}
               alt="خدمات إطعام وضيافة"

@@ -33,6 +33,7 @@ import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
 import PageBackground from '@/components/PageBackground'
 import { bookingHeroVideo, menuImageSet, pickNonMenuImage } from '@/data/publicMedia'
+import useDesktopHeroVideo from '@/hooks/useDesktopHeroVideo'
 
 const EMAILJS_PUBLIC_KEY = 'zbeu8eZx9DOBnf-dY'
 const EMAILJS_SERVICE_ID = 'service_yn6thtg'
@@ -476,6 +477,7 @@ function FieldError({ message }: { message?: string }) {
 }
 
 export default function Booking() {
+  const canPlayHeroVideo = useDesktopHeroVideo()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [cartDraftInfo, setCartDraftInfo] = useState<CartDraftState | null>(null)
   const [bookingMode, setBookingMode] = useState<BookingMode>('package')
@@ -1134,7 +1136,7 @@ export default function Booking() {
       >
         <section className="relative flex min-h-[62vh] items-center overflow-hidden bg-dark sm:min-h-[68vh] md:min-h-[74vh]">
           <div className="absolute inset-0">
-            {isHeroVideoBroken ? (
+            {isHeroVideoBroken || !canPlayHeroVideo ? (
               <img
                 src={bookingHeroImage}
                 alt="حجز بوفيه وضيافة"

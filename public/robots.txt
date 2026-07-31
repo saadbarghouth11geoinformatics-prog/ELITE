@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://xn--mgbg1fxab.store/sitemap.xml

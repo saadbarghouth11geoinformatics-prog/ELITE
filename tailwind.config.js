@@ -68,8 +68,8 @@ module.exports = {
         },
       },
       fontFamily: {
-        arabic: ["Noto Kufi Arabic", "Tajawal", "Segoe UI", "sans-serif"],
-        arabicBody: ["Noto Naskh Arabic", "Tajawal", "Segoe UI", "sans-serif"],
+        arabic: ["system-ui", "Segoe UI", "Tahoma", "Arial", "sans-serif"],
+        arabicBody: ["system-ui", "Segoe UI", "Tahoma", "Arial", "sans-serif"],
         english: ["Playfair Display", "Cormorant Garamond", "serif"],
       },
       borderRadius: {

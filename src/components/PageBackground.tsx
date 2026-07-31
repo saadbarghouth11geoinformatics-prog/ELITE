@@ -53,7 +53,7 @@ export default function PageBackground({
   const backgroundImage = resolveAssetUrl(rawBackgroundImage)
 
   return (
-    <div className="absolute inset-0">
+    <div className="page-background absolute inset-0" aria-hidden="true">
       {backgroundImage ? (
         <AnimatePresence initial={false}>
           <motion.div

@@ -24,6 +24,7 @@ import TextReveal from '@/components/animations/TextReveal'
 import StaggerContainer from '@/components/animations/StaggerContainer'
 import FloatingCard from '@/components/animations/FloatingCard'
 import { contactHeroVideo, menuImageSet, pickNonMenuImage } from '@/data/publicMedia'
+import useDesktopHeroVideo from '@/hooks/useDesktopHeroVideo'
 import { serviceAreasText, yearsOfExcellence } from '@/data/companyProfile'
 
 const WHATSAPP_NUMBER = '966548823127'
@@ -136,6 +137,7 @@ function BoxDivider() {
 }
 
 export default function Contact() {
+  const canPlayHeroVideo = useDesktopHeroVideo()
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -201,7 +203,7 @@ export default function Contact() {
       >
       <section className="relative flex min-h-[68vh] items-center overflow-hidden bg-dark sm:min-h-[78vh] lg:min-h-screen">
         <div className="absolute inset-0">
-          {isHeroVideoBroken ? (
+          {isHeroVideoBroken || !canPlayHeroVideo ? (
             <img
               src={contactHeroImage}
               alt="Contact"
