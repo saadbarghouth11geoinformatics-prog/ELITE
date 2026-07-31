@@ -14,7 +14,7 @@ createRoot(document.getElementById('root')!).render(
         richColors
         toastOptions={{
           style: {
-            fontFamily: 'Noto Kufi Arabic, sans-serif',
+            fontFamily: 'system-ui, Segoe UI, Tahoma, sans-serif',
           },
         }}
       />

@@ -5,9 +5,9 @@ import Navigation from './components/Navigation'
 import Footer from './components/Footer'
 import ScrollProgress from './components/ScrollProgress'
 import Seo from './components/Seo'
+import Home from './pages/Home'
 import './App.css'
 
-const Home = lazy(() => import('./pages/Home'))
 const About = lazy(() => import('./pages/About'))
 const Services = lazy(() => import('./pages/Services'))
 const Menu = lazy(() => import('./pages/Menu'))
@@ -90,7 +90,7 @@ function PageTransition({ children }: { children: React.ReactNode }) {
 
 function RouteFallback() {
   return (
-    <div className="min-h-[55vh] flex items-center justify-center">
+    <div className="min-h-screen flex items-center justify-center">
       <div className="w-10 h-10 border-2 border-gold/40 border-t-gold rounded-full animate-spin" />
     </div>
   )
@@ -119,9 +119,9 @@ function App() {
               <Route path="/booking" element={<PageTransition><Booking /></PageTransition>} />
               <Route path="/contact" element={<PageTransition><Contact /></PageTransition>} />
             </Routes>
+            <Footer />
           </Suspense>
         </AnimatePresence>
-        <Footer />
       </div>
     </>
   )

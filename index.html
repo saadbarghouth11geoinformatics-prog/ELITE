@@ -47,12 +47,6 @@
     <link rel="alternate" hreflang="ar-SA" href="https://xn--mgbg1fxab.store/" />
     <link rel="alternate" hreflang="x-default" href="https://xn--mgbg1fxab.store/" />
     <link rel="icon" href="/favicon.ico" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;600;700;800;900&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Tajawal:wght@400;500;700;800;900&display=swap"
-    />
     <title>إيليت للحفلات والإعاشة | بوفيهات وضيافة في جدة ومكة</title>
     <script type="application/ld+json" data-static-seo>
       {
@@ -69,18 +63,56 @@
             "@type": "Caterer",
             "@id": "https://xn--mgbg1fxab.store/#business",
             "name": "إيليت للحفلات والإعاشة",
+            "alternateName": ["إيليت للحفلات", "النخبة للحفلات", "ELITE Catering"],
             "url": "https://xn--mgbg1fxab.store/",
             "telephone": "+966548823127",
             "email": "saadbarghouth11@gmail.com",
             "image": "https://xn--mgbg1fxab.store/images/New/WhatsApp%20Image%202026-07-19%20at%2010.53.46%20PM.jpeg",
             "priceRange": "$$",
+            "menu": "https://xn--mgbg1fxab.store/menu",
+            "servesCuisine": ["المطبخ السعودي", "المطبخ العربي", "بوفيه مناسبات"],
+            "openingHoursSpecification": {
+              "@type": "OpeningHoursSpecification",
+              "dayOfWeek": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+              "opens": "08:00",
+              "closes": "22:00"
+            },
             "address": {
               "@type": "PostalAddress",
               "addressLocality": "جدة",
               "addressCountry": "SA"
             },
             "areaServed": ["جدة", "مكة", "الطائف", "أضم", "المخواة", "غميقة"],
-            "sameAs": ["https://instagram.com/elite_for_outside_catering_"]
+            "sameAs": ["https://instagram.com/elite_for_outside_catering_"],
+            "hasOfferCatalog": {
+              "@type": "OfferCatalog",
+              "name": "خدمات إيليت للحفلات والإعاشة",
+              "itemListElement": [
+                {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "بوفيهات وإعاشة للمناسبات"}},
+                {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "تجهيز وضيافة القاعات"}},
+                {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "تموين حفلات الزفاف والشركات"}}
+              ]
+            }
+          },
+          {
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "هل توفر إيليت قاعة حفلات؟",
+                "acceptedAnswer": {"@type": "Answer", "text": "تقدم إيليت تجهيز الطعام والبوفيه والضيافة داخل القاعة أو موقع المناسبة الذي يحدده العميل."}
+              },
+              {
+                "@type": "Question",
+                "name": "كيف أطلب عرض سعر؟",
+                "acceptedAnswer": {"@type": "Answer", "text": "أرسل المدينة والتاريخ وعدد الضيوف ونوع المناسبة من صفحة الحجز أو عبر واتساب."}
+              },
+              {
+                "@type": "Question",
+                "name": "ما المدن التي تغطيها الخدمة؟",
+                "acceptedAnswer": {"@type": "Answer", "text": "تشمل التغطية جدة ومكة والطائف وأضم والمخواة وغميقة، ويمكن الاستفسار عن المواقع المجاورة قبل الحجز."}
+              }
+            ]
           }
         ]
       }
@@ -92,7 +124,7 @@
 
       body,
       body * {
-        font-family: 'Noto Kufi Arabic', 'Noto Naskh Arabic', 'Tajawal', -apple-system,
+        font-family: system-ui, -apple-system,
           BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Tahoma', sans-serif !important;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;

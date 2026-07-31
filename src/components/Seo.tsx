@@ -120,12 +120,37 @@ export default function Seo() {
         '@type': 'Caterer',
         '@id': `${siteUrl}/#business`,
         name: siteConfig.name,
+        alternateName: ['إيليت للحفلات', 'النخبة للحفلات', 'ELITE Catering'],
         description: siteConfig.description,
         url: `${siteUrl}/`,
         telephone: siteConfig.phone,
         email: siteConfig.email,
         image: imageUrl,
         priceRange: '$$',
+        menu: buildUrl('/menu'),
+        servesCuisine: ['المطبخ السعودي', 'المطبخ العربي', 'بوفيه مناسبات'],
+        openingHoursSpecification: {
+          '@type': 'OpeningHoursSpecification',
+          dayOfWeek: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+          opens: '08:00',
+          closes: '22:00',
+        },
+        contactPoint: {
+          '@type': 'ContactPoint',
+          telephone: siteConfig.phone,
+          contactType: 'reservations',
+          areaServed: 'SA',
+          availableLanguage: ['ar'],
+        },
+        hasOfferCatalog: {
+          '@type': 'OfferCatalog',
+          name: 'خدمات إيليت للحفلات والإعاشة',
+          itemListElement: [
+            'بوفيهات وإعاشة للمناسبات',
+            'تجهيز وضيافة القاعات',
+            'تموين حفلات الزفاف والشركات',
+          ].map((name) => ({ '@type': 'Offer', itemOffered: { '@type': 'Service', name } })),
+        },
         areaServed: siteConfig.areaServed,
         address: {
           '@type': 'PostalAddress',
@@ -158,6 +183,38 @@ export default function Seo() {
             position: 2,
             name: routeLabels[pathname] ?? title,
             item: canonical,
+          },
+        ],
+      })
+    }
+
+    if (pathname === '/') {
+      graph.push({
+        '@type': 'FAQPage',
+        mainEntity: [
+          {
+            '@type': 'Question',
+            name: 'هل توفر إيليت قاعة حفلات؟',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'تقدم إيليت تجهيز الطعام والبوفيه والضيافة داخل القاعة أو موقع المناسبة الذي يحدده العميل.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'كيف أطلب عرض سعر؟',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'أرسل المدينة والتاريخ وعدد الضيوف ونوع المناسبة من صفحة الحجز أو عبر واتساب.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'ما المدن التي تغطيها الخدمة؟',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'تشمل التغطية جدة ومكة والطائف وأضم والمخواة وغميقة، ويمكن الاستفسار عن المواقع المجاورة قبل الحجز.',
+            },
           },
         ],
       })

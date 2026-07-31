@@ -21,6 +21,7 @@ import FloatingCard from '@/components/animations/FloatingCard'
 import StaggerContainer from '@/components/animations/StaggerContainer'
 import { aboutHeroVideo, menuImageSet, pickNonMenuImage } from '@/data/publicMedia'
 import { foundedYear, serviceAreasText, yearsOfExcellence } from '@/data/companyProfile'
+import useDesktopHeroVideo from '@/hooks/useDesktopHeroVideo'
 
 const stats = [
   { value: yearsOfExcellence, suffix: '+', label: 'عام من الخبرة', icon: Clock },
@@ -106,6 +107,7 @@ function SectionTopLine() {
 }
 
 export default function About() {
+  const canPlayHeroVideo = useDesktopHeroVideo()
   const statsRef = useRef(null)
   const [isHeroVideoBroken, setIsHeroVideoBroken] = useState(false)
   const isStatsInView = useInView(statsRef, { once: true, margin: '-100px' })
@@ -123,7 +125,7 @@ export default function About() {
       >
         <section className="relative min-h-screen flex items-center overflow-hidden pt-24 sm:pt-28">
           <div className="absolute inset-0">
-            {isHeroVideoBroken ? (
+            {isHeroVideoBroken || !canPlayHeroVideo ? (
               <img
                 src={aboutHeroImage}
                 alt="حول النخبة للحفلات"
