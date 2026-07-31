@@ -13,6 +13,7 @@ import RevealOnScroll from '@/components/RevealOnScroll'
 import MagneticButton from '@/components/MagneticButton'
 import PageBackground from '@/components/PageBackground'
 import LocalServiceContent from '@/components/LocalServiceContent'
+import SitelinksNavigation from '@/components/SitelinksNavigation'
 import useDesktopHeroVideo from '@/hooks/useDesktopHeroVideo'
 import FoodTrayReveal from '@/components/animations/FoodTrayReveal'
 import DrinkFloat from '@/components/animations/DrinkFloat'
@@ -876,6 +877,7 @@ export default function Home() {
         className="relative z-10"
       >
         <HeroSection />
+        <SitelinksNavigation />
         <FeaturesSection />
         <AboutPreviewSection />
         <ServicesPreviewSection />

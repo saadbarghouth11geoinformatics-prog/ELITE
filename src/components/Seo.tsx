@@ -113,7 +113,8 @@ export default function Seo() {
         '@type': 'WebSite',
         '@id': `${siteUrl}/#website`,
         url: `${siteUrl}/`,
-        name: siteConfig.name,
+        name: 'إيليت',
+        alternateName: ['النخبة للحفلات والإعاشة', 'ELITE', 'ايليت.store'],
         inLanguage: 'ar-SA',
       },
       {
