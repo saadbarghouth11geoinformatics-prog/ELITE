@@ -4,7 +4,23 @@ import {
   breakfastVideoPaths as generatedBreakfastVideoPaths,
   latestImagePaths as generatedLatestImagePaths,
   latestVideoPaths as generatedLatestVideoPaths,
+  newestVideoPaths as generatedNewestVideoPaths,
 } from './generated/publicMediaManifest'
+
+const newestWorkTitles = [
+  'تجهيز الضيافة بأناقة',
+  'تفاصيل بوفيه المناسبات',
+  'لمسات التقديم الأخيرة',
+  'تنسيق طاولة البوفيه',
+  'كواليس التجهيز الاحترافي',
+  'جاهزية المكان لاستقبال الضيوف',
+] as const
+
+export const newestWorkVideos = generatedNewestVideoPaths.map((src, index) => ({
+  src,
+  title: newestWorkTitles[index] ?? `من أحدث أعمال إيليت ${index + 1}`,
+  uploadDate: '2026-10-07',
+}))
 
 const newMediaImageNames = [
   'WhatsApp Image 2026-03-17 at 10.47.27 PM.jpeg',
@@ -95,6 +111,7 @@ export const latestEventImages = generatedLatestImagePaths.filter(
   (src) => !latestMenuImagePaths.has(src) && !nonPublicLatestImages.has(src)
 )
 export const latestPublicVideos = [...generatedLatestVideoPaths]
+const newestVideoSet = new Set<string>(generatedNewestVideoPaths)
 
 const legacyPublicImages = newMediaImageNames.map((name) => toNewMediaPath(name))
 export const publicImages = [...latestEventImages, ...legacyPublicImages]
@@ -102,7 +119,7 @@ export const publicVideos = newMediaVideoNames.map((name) => toNewMediaPath(name
 const latestVideoSet = new Set<string>(latestPublicVideos)
 export const allPublicVideos = [
   ...latestPublicVideos,
-  ...allPublicVideoPaths.filter((src) => !latestVideoSet.has(src)),
+  ...allPublicVideoPaths.filter((src) => !latestVideoSet.has(src) && !newestVideoSet.has(src)),
 ]
 export const legacyBreakfastImages = legacyBreakfastImageNames.map((name) => toNewMediaPath(name))
 export const breakfastGalleryImages = [...legacyBreakfastImages, ...generatedBreakfastImagePaths]

@@ -53,6 +53,12 @@ export const allPublicVideoPaths = [
   "/images/%D8%A7%D9%84%D9%81%D8%B7%D8%A7%D8%B1/WhatsApp%20Video%202026-03-29%20at%2010.07.32%20PM.mp4",
   "/images/%D8%A7%D9%84%D9%81%D8%B7%D8%A7%D8%B1/WhatsApp%20Video%202026-03-29%20at%2010.07.34%20PM.mp4",
   "/images/%D8%A7%D9%84%D9%81%D8%B7%D8%A7%D8%B1/WhatsApp%20Video%202026-03-29%20at%2010.07.35%20PM.mp4",
+  "/New%20Videos/WhatsApp%20Video%202026-10-07%20at%2012.30.39%20AM.mp4",
+  "/New%20Videos/WhatsApp%20Video%202026-10-07%20at%2012.31.21%20AM.mp4",
+  "/New%20Videos/WhatsApp%20Video%202026-10-07%20at%2012.45.57%20AM.mp4",
+  "/New%20Videos/WhatsApp%20Video%202026-10-07%20at%2012.46.02%20AM.mp4",
+  "/New%20Videos/WhatsApp%20Video%202026-10-07%20at%2012.46.10%20AM.mp4",
+  "/New%20Videos/WhatsApp%20Video%202026-10-07%20at%2012.46.15%20AM.mp4",
   "/images/%D8%A7%D9%84%D9%81%D8%B7%D8%A7%D8%B1/WhatsApp%20Video%202026-03-29%20at%2010.07.32%20PM%20(1).mp4",
   "/images/%D8%A7%D9%84%D9%81%D8%B7%D8%A7%D8%B1/WhatsApp%20Video%202026-03-29%20at%2010.07.35%20PM%20(1).mp4"
 ] as const
@@ -90,4 +96,12 @@ export const latestVideoPaths = [
   "/images/New/WhatsApp%20Video%202026-07-24%20at%201.00.37%20AM.mp4",
   "/images/New/WhatsApp%20Video%202026-07-24%20at%201.01.15%20AM.mp4",
   "/images/New/WhatsApp%20Video%202026-07-24%20at%201.01.24%20AM.mp4"
+] as const
+export const newestVideoPaths = [
+  "/New%20Videos/WhatsApp%20Video%202026-10-07%20at%2012.30.39%20AM.mp4",
+  "/New%20Videos/WhatsApp%20Video%202026-10-07%20at%2012.31.21%20AM.mp4",
+  "/New%20Videos/WhatsApp%20Video%202026-10-07%20at%2012.45.57%20AM.mp4",
+  "/New%20Videos/WhatsApp%20Video%202026-10-07%20at%2012.46.02%20AM.mp4",
+  "/New%20Videos/WhatsApp%20Video%202026-10-07%20at%2012.46.10%20AM.mp4",
+  "/New%20Videos/WhatsApp%20Video%202026-10-07%20at%2012.46.15%20AM.mp4"
 ] as const

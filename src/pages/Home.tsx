@@ -14,6 +14,7 @@ import MagneticButton from '@/components/MagneticButton'
 import PageBackground from '@/components/PageBackground'
 import LocalServiceContent from '@/components/LocalServiceContent'
 import SitelinksNavigation from '@/components/SitelinksNavigation'
+import NewestWorkVideos from '@/components/NewestWorkVideos'
 import useDesktopHeroVideo from '@/hooks/useDesktopHeroVideo'
 import FoodTrayReveal from '@/components/animations/FoodTrayReveal'
 import DrinkFloat from '@/components/animations/DrinkFloat'
@@ -878,6 +879,7 @@ export default function Home() {
       >
         <HeroSection />
         <SitelinksNavigation />
+        <NewestWorkVideos compact />
         <FeaturesSection />
         <AboutPreviewSection />
         <ServicesPreviewSection />

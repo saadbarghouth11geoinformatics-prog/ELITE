@@ -137,7 +137,7 @@ for (const route of routes) {
   )
 
   const fallback = `<div id="root"><main style="max-width:980px;margin:0 auto;padding:48px 20px;color:#fff;background:#0a0a0a"><h1>${escapeHtml(route.heading)}</h1><p>${escapeHtml(route.description)}</p>${navigation}</main></div>`
-  html = html.replace(/<div id="root">[\s\S]*?<\/div>/i, fallback)
+  html = html.replace(/<div id="root">[\s\S]*?<\/main>\s*<\/div>/i, fallback)
 
   const outputFile = path.join(DIST_DIR, `${route.path.slice(1)}.html`)
   fs.writeFileSync(outputFile, html)

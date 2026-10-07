@@ -17,6 +17,7 @@ import {
 import { Button } from '@/components/ui/button'
 import RevealOnScroll from '@/components/RevealOnScroll'
 import PageBackground from '@/components/PageBackground'
+import NewestWorkVideos from '@/components/NewestWorkVideos'
 import {
   allPublicVideos,
   kitchenHeroVideo,
@@ -365,6 +366,8 @@ export default function Kitchen() {
   const [activeCategory, setActiveCategory] = useState<GalleryFilter>('all')
   const [activeVideoSrc, setActiveVideoSrc] = useState(kitchenVideos[0]?.src ?? '')
   const [likedItems, setLikedItems] = useState<number[]>([])
+  const [visibleGalleryCount, setVisibleGalleryCount] = useState(12)
+  const [visibleVideoCount, setVisibleVideoCount] = useState(12)
 
   const filteredItems = useMemo(
     () =>
@@ -373,6 +376,7 @@ export default function Kitchen() {
         : orderedGalleryItems.filter((item) => item.category === activeCategory),
     [activeCategory]
   )
+  const visibleItems = filteredItems.slice(0, visibleGalleryCount)
 
   const activeVideo = useMemo(
     () => kitchenVideos.find((video) => video.src === activeVideoSrc) ?? kitchenVideos[0] ?? null,
@@ -474,6 +478,8 @@ export default function Kitchen() {
         </div>
       </section>
 
+      <NewestWorkVideos showCta={false} />
+
       <section id="kitchen-videos" className="py-20 bg-dark-800">
         <div className="container-custom px-4 sm:px-6 lg:px-8">
           <RevealOnScroll>
@@ -567,7 +573,7 @@ export default function Kitchen() {
               </div>
 
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-                {kitchenVideos.map((video, index) => {
+                {kitchenVideos.slice(0, visibleVideoCount).map((video, index) => {
                   const posterSrc =
                     index < latestPublicVideos.length
                       ? publicImages[index % Math.max(publicImages.length, 1)] ?? FALLBACK_IMAGE
@@ -620,6 +626,16 @@ export default function Kitchen() {
                     </RevealOnScroll>
                   )
                 })}
+              </div>
+              <div className="mt-8 flex flex-col items-center gap-4">
+                <p className="text-sm text-white/60 font-arabicBody" aria-live="polite">
+                  يظهر الآن {Math.min(visibleVideoCount, kitchenVideos.length)} من أصل {kitchenVideos.length} فيديو
+                </p>
+                {visibleVideoCount < kitchenVideos.length ? (
+                  <Button type="button" variant="outline" onClick={() => setVisibleVideoCount((count) => count + 12)} className="border-gold/60 px-8 py-6 text-gold hover:bg-gold hover:text-dark font-arabic">
+                    عرض المزيد من الفيديوهات
+                  </Button>
+                ) : null}
               </div>
             </>
           ) : (
@@ -749,7 +765,7 @@ export default function Kitchen() {
 
           <motion.div layout className="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-3 xl:grid-cols-4">
             <AnimatePresence>
-              {filteredItems.map((item, index) => {
+              {visibleItems.map((item, index) => {
                 const meta = categoryMeta[item.category]
                 const Icon = meta.icon
                 const isLiked = likedItems.includes(item.id)
@@ -818,6 +834,12 @@ export default function Kitchen() {
               })}
             </AnimatePresence>
           </motion.div>
+
+          {visibleGalleryCount < filteredItems.length ? (
+            <div className="mt-10 text-center">
+              <Button type="button" variant="outline" onClick={() => setVisibleGalleryCount((count) => count + 12)} className="border-gold/60 px-8 py-6 text-gold hover:bg-gold hover:text-dark font-arabic">عرض المزيد من الصور</Button>
+            </div>
+          ) : null}
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}

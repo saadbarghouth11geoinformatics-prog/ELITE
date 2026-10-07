@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { buildUrl, getSiteUrl, routeSeo, siteConfig } from '@/data/seo'
-import { latestEventImages, latestPublicVideos } from '@/data/publicMedia'
+import { latestEventImages, latestPublicVideos, newestWorkVideos } from '@/data/publicMedia'
 
 const routeLabels: Record<string, string> = {
   '/about': 'من نحن',
@@ -218,6 +218,19 @@ export default function Seo() {
             },
           },
         ],
+      })
+    }
+
+    if (pathname === '/' || pathname === '/kitchen') {
+      newestWorkVideos.forEach((video) => {
+        graph.push({
+          '@type': 'VideoObject',
+          name: video.title,
+          description: `${video.title} من أحدث تجهيزات بوفيهات وضيافة إيليت للحفلات والإعاشة.`,
+          uploadDate: video.uploadDate,
+          contentUrl: buildUrl(video.src),
+          thumbnailUrl: buildUrl(latestEventImages[0] ?? imagePath),
+        })
       })
     }
 
