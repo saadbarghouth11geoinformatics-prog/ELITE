@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowLeft, CalendarDays, Clapperboard, Play } from 'lucide-react'
@@ -6,6 +6,43 @@ import { newestWorkVideos } from '@/data/publicMedia'
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog'
 
 type Props = { compact?: boolean; showCta?: boolean }
+
+type WorkVideo = (typeof newestWorkVideos)[number]
+const octoberDates = ['2 أكتوبر', '3 أكتوبر', '4 أكتوبر', '5 أكتوبر', '6 أكتوبر', '7 أكتوبر']
+
+function InlineVideoPreview({ video, index, onSelect }: { video: WorkVideo; index: number; onSelect: (video: WorkVideo) => void }) {
+  const cardRef = useRef<HTMLButtonElement>(null)
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const [nearViewport, setNearViewport] = useState(false)
+  const [canAutoplay] = useState(() => {
+    const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData ?? false
+    return !saveData && !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  })
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => setNearViewport(entry.isIntersecting), { rootMargin: '240px 0px', threshold: 0.08 })
+    const card = cardRef.current
+    if (card) observer.observe(card)
+    return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => {
+    const player = videoRef.current
+    if (!player || !nearViewport || !canAutoplay) { player?.pause(); return }
+    void player.play().catch(() => undefined)
+  }, [nearViewport, canAutoplay])
+
+  const attachSource = nearViewport && canAutoplay
+  return (
+    <motion.button ref={cardRef} type="button" onClick={() => onSelect(video)} aria-label={`تشغيل فيديو ${video.title}`} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-60px' }} transition={{ delay: Math.min(index * .06, .3) }} className="group relative aspect-video overflow-hidden rounded-[26px] border border-white/10 bg-[linear-gradient(145deg,#211b0d,#080808_62%)] text-right shadow-[0_22px_60px_rgba(0,0,0,.4)] transition hover:-translate-y-1 hover:border-gold/45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold">
+      {attachSource ? <video ref={videoRef} src={video.src} muted loop playsInline preload="metadata" aria-hidden="true" className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-70 transition duration-500 group-hover:opacity-90" /> : null}
+      <div className="absolute inset-0 opacity-50 [background-image:radial-gradient(circle_at_25%_20%,rgba(229,199,107,.28),transparent_27%),linear-gradient(115deg,transparent_45%,rgba(255,255,255,.05)_46%,transparent_47%)]" />
+      <span className="absolute left-4 top-4 flex items-center gap-1.5 rounded-full border border-white/10 bg-black/55 px-3 py-1 text-xs text-white/70 font-arabic"><CalendarDays className="h-3.5 w-3.5 text-gold" /> {octoberDates[index] ?? '7 أكتوبر'}</span>
+      <span className="absolute inset-0 m-auto flex h-16 w-16 items-center justify-center rounded-full border border-gold/45 bg-gold/15 text-gold backdrop-blur-sm transition group-hover:scale-110 group-hover:bg-gold group-hover:text-black"><Play className="h-7 w-7 fill-current" /></span>
+      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/80 to-transparent p-5 pt-14"><span className="mb-1 block text-[11px] tracking-[.18em] text-gold/75">ELITE · NEW REEL</span><h3 className="text-lg text-white font-arabic">{video.title}</h3></div>
+    </motion.button>
+  )
+}
 
 export default function NewestWorkVideos({ compact = false, showCta = true }: Props) {
   const [activeVideo, setActiveVideo] = useState<(typeof newestWorkVideos)[number] | null>(null)
@@ -24,7 +61,7 @@ export default function NewestWorkVideos({ compact = false, showCta = true }: Pr
         </div>
 
         <div className={`grid gap-4 ${compact ? 'sm:grid-cols-2 lg:grid-cols-3' : 'sm:grid-cols-2 xl:grid-cols-3'}`}>
-          {newestWorkVideos.map((video, index) => (
+          {newestWorkVideos.map((video, index) => <InlineVideoPreview key={video.src} video={video} index={index} onSelect={setActiveVideo} />) /*
             <motion.button key={video.src} type="button" onClick={() => setActiveVideo(video)} aria-label={`تشغيل فيديو ${video.title}`} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-60px' }} transition={{ delay: Math.min(index * .06, .3) }} className="group relative aspect-video overflow-hidden rounded-[26px] border border-white/10 bg-[linear-gradient(145deg,#211b0d,#080808_62%)] text-right shadow-[0_22px_60px_rgba(0,0,0,.4)] transition hover:-translate-y-1 hover:border-gold/45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold">
               <div className="absolute inset-0 opacity-50 [background-image:radial-gradient(circle_at_25%_20%,rgba(229,199,107,.28),transparent_27%),linear-gradient(115deg,transparent_45%,rgba(255,255,255,.05)_46%,transparent_47%)]" />
               <span className="absolute left-4 top-4 flex items-center gap-1.5 rounded-full border border-white/10 bg-black/55 px-3 py-1 text-xs text-white/70 font-arabic"><CalendarDays className="h-3.5 w-3.5 text-gold" /> 7 أكتوبر</span>
@@ -34,7 +71,7 @@ export default function NewestWorkVideos({ compact = false, showCta = true }: Pr
                 <h3 className="text-lg text-white font-arabic">{video.title}</h3>
               </div>
             </motion.button>
-          ))}
+          */}
         </div>
       </div>
 

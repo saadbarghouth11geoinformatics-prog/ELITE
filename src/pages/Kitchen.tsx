@@ -1,4 +1,4 @@
-import { useMemo, useState, type MouseEvent, type SyntheticEvent } from 'react'
+import { useMemo, useState, type KeyboardEvent, type MouseEvent, type SyntheticEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
@@ -18,9 +18,11 @@ import { Button } from '@/components/ui/button'
 import RevealOnScroll from '@/components/RevealOnScroll'
 import PageBackground from '@/components/PageBackground'
 import NewestWorkVideos from '@/components/NewestWorkVideos'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import {
   allPublicVideos,
   kitchenHeroVideo,
+  latestEventImages,
   latestPublicVideos,
   menuImageSet,
   pickPublicImage,
@@ -199,7 +201,12 @@ const categoryMeta: Record<
   },
 }
 
-const orderedGalleryItems: GalleryDisplayItem[] = rawGalleryItems
+// الصور المعروضة هنا كلها ملفات العميل المحلية تحت public/images، بدون روابط خارجية أو تكرار.
+const localGalleryItems: GalleryItem[] = Array.from(new Set([...latestEventImages, ...publicImages]))
+  .filter((src) => src.startsWith('/'))
+  .map((src, index) => ({ ...rawGalleryItems[index % rawGalleryItems.length], id: index + 1, src }))
+
+const orderedGalleryItems: GalleryDisplayItem[] = localGalleryItems
   .slice()
   .sort((a, b) => {
     const orderA = categoryOrder.indexOf(a.category)
@@ -366,6 +373,7 @@ export default function Kitchen() {
   const [activeCategory, setActiveCategory] = useState<GalleryFilter>('all')
   const [activeVideoSrc, setActiveVideoSrc] = useState(kitchenVideos[0]?.src ?? '')
   const [likedItems, setLikedItems] = useState<number[]>([])
+  const [selectedGalleryItem, setSelectedGalleryItem] = useState<GalleryDisplayItem | null>(null)
   const [visibleGalleryCount, setVisibleGalleryCount] = useState(12)
   const [visibleVideoCount, setVisibleVideoCount] = useState(12)
 
@@ -386,6 +394,14 @@ export default function Kitchen() {
   const toggleLike = (id: number, event?: MouseEvent) => {
     event?.stopPropagation()
     setLikedItems((prev) => (prev.includes(id) ? prev.filter((itemId) => itemId !== id) : [...prev, id]))
+  }
+
+  const openGalleryItem = (item: GalleryDisplayItem) => setSelectedGalleryItem(item)
+  const handleGalleryKeyDown = (event: KeyboardEvent<HTMLElement>, item: GalleryDisplayItem) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      openGalleryItem(item)
+    }
   }
 
   const handleVideoError = (src: string) => {
@@ -750,7 +766,7 @@ export default function Kitchen() {
                   key={category.id}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={() => setActiveCategory(category.id)}
+                  onClick={() => { setActiveCategory(category.id); setVisibleGalleryCount(12) }}
                   className={`rounded-full px-6 py-2 font-arabic transition-all duration-300 ${
                     activeCategory === category.id
                       ? 'bg-gradient-gold text-dark'
@@ -779,6 +795,11 @@ export default function Kitchen() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 18 }}
                     transition={{ duration: 0.35, delay: index * 0.02 }}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`عرض صورة ${item.title} بالحجم الكامل`}
+                    onClick={() => openGalleryItem(item)}
+                    onKeyDown={(event) => handleGalleryKeyDown(event, item)}
                     className="group relative overflow-hidden rounded-2xl border border-gold/15 bg-dark-800/70 shadow-[0_18px_35px_rgba(0,0,0,0.35)]"
                   >
                     <div className="relative h-44 overflow-hidden">
@@ -786,6 +807,7 @@ export default function Kitchen() {
                         src={item.src}
                         alt={item.title}
                         loading="lazy"
+                        decoding="async"
                         onError={handleImageError}
                         className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                       />
@@ -859,6 +881,20 @@ export default function Kitchen() {
           </motion.div>
         </div>
       </section>
+
+      <Dialog open={selectedGalleryItem !== null} onOpenChange={(open) => !open && setSelectedGalleryItem(null)}>
+        {selectedGalleryItem ? (
+          <DialogContent className="max-h-[92vh] w-[min(1120px,96vw)] gap-0 overflow-hidden border-gold/30 bg-dark-900/95 p-0 shadow-[0_32px_120px_rgba(0,0,0,.92)]" dir="rtl">
+            <DialogHeader className="border-b border-gold/15 px-5 py-4 pr-12 text-right">
+              <DialogTitle className="font-arabic text-lg text-white sm:text-xl">{selectedGalleryItem.title}</DialogTitle>
+              <DialogDescription className="font-arabicBody text-white/65">صورة من أعمال ELITE. اضغط Escape أو زر الإغلاق للعودة إلى المعرض.</DialogDescription>
+            </DialogHeader>
+            <div className="min-h-0 bg-black p-2 sm:p-3">
+              <img src={selectedGalleryItem.src} alt={selectedGalleryItem.title} className="max-h-[70vh] w-full object-contain" />
+            </div>
+          </DialogContent>
+        ) : null}
+      </Dialog>
 
       <section className="py-20 bg-dark-800 border-t border-gold/10">
         <div className="container-custom px-4 sm:px-6 lg:px-8">
